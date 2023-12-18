@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles2.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>客戶基本資料</title>
+</head>
+
+<body>
+    <header>
+        <h1>客戶基本資料</h1>
+        <div id="logoutContainer">
+            <img src="/images/logout.png" onclick="logout()" alt="Logout Image">
+            <span id="logoutBtn" onclick="logout()">Log Out</span>
+        </div>
+        <script>
+            function logout() {
+                window.location.href = "/";
+            }
+        </script>
+    </header>
+    <div class="container">
+        <nav>
+            <div class="dropdown">
+                <a href="#" id="clientdata">客戶基本資料</a>
+                <div class="dropdown-content">
+                    <a href="#" id="addclient">新增資料</a>
+                    <a href="#" id="deleteclient">刪除資料</a>
+                    <a href="#" id="removeclient">修改資料</a>
+                    <a href="#" id="searchclient">查詢資料</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" id="allclient">客戶數據</a>
+                <div class="dropdown-content">
+                    <a href="#" id="monthclient">每月訂貨總金額</a>
+                    <a href="#" id="weekclient">每週訂貨總金額</a>
+                    <a href="#" id="monthallclient">總客戶每月訂貨總金額</a>
+                    <a href="#" id="weekallclient">總客戶每週訂貨總金額</a>
+                </div>
+            </div>
+            <script>
+                let dropdownTimeout;
+
+                function showDropdownContent() {
+                    clearTimeout(dropdownTimeout);
+                    document.querySelector(".dropdown-content").style.display = "block";
+                }
+
+                function hideDropdownContent() {
+                    dropdownTimeout = setTimeout(function () {
+                        document.querySelector(".dropdown-content").style.display = "none";
+                    }, 500); // Adjust the delay (in milliseconds) according to your preference
+                }
+                document.querySelector(".dropdown#clientdataDropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#clientdataDropdown").addEventListener("mouseleave", hideDropdownContent);
+                document.querySelector(".dropdown#totalclientDropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#totalclientDropdown").addEventListener("mouseleave", hideDropdownContent);
+                window.addEventListener("scroll", showDropdownContent);
+                window.addEventListener("scroll", hideDropdownContent);
+            </script>
+
+        </nav>
+        <section>
+            <!-- 新增訂單表單 -->
+            <h2>刪除客戶資料</h2>
+            <form id="deleteclientForm" onsubmit="submitForm(event)">
+                輸入要刪除客戶資料的身分證字號：<input type="text" id="customerID" name="customerID" required><br>
+                <button id="deletesearchclientbtn">確認查詢</button>
+                <button id="deleteclientbtn">確認刪除客戶資料</button>
+            </form>
+            <div id="searchResult"></div>
+
+        </section>
+        <script>
+            $(document).ready(function () {
+                $("#deletesearchclientbtn").click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '/client_interface/search_delete_client_data',
+                        async: true,
+                        data: JSON.stringify({
+                            customer_id: $("#customerID").val(),
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.status === "true") {
+                                var result = "消費狀態: " + data.useornot;
+                                $("#searchResult").text(result); // Show the result
+                                $("#searchResult").show();
+                            } else if (data.status === "permission denied") {
+                                alert("顯示資料失敗，沒有此身分證");
+                            } else {
+                                alert("發生預期之外的錯誤");
+                            }
+                        },
+                        error: function () {
+                            alert("失败");
+                        }
+                    });
+                    return false;
+                });
+            });
+            $(document).ready(function () {
+                $("#deleteclientbtn").click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '/client_interface/delete_client_data',
+                        async: true,
+                        data: JSON.stringify({
+                            customer_id: $("#customerID").val(),
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.create_flag === "true") {
+                                alert("刪除成功");
+                            } else {
+                                alert("發生預期之外的錯誤");
+                            }
+                        },
+                        error: function () {
+                            alert("失败");
+                        }
+                    });
+                    return false;
+                });
+            });
+            
+        </script>
+
+    </div>
+    <script>
+        document.querySelector("nav a#clientdata").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface";
+        });
+        document.querySelector("nav a#addclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/add_client";
+        });
+        document.querySelector("nav a#deleteclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/delete_client";
+        });
+        document.querySelector("nav a#removeclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/modify_client";
+        });
+        document.querySelector("nav a#searchclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/search_client";
+        });
+        document.querySelector("nav a#monthclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/month_client";
+        });
+        document.querySelector("nav a#weekclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/week_client";
+        });
+        document.querySelector("nav a#monthallclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/month_allclient";
+        });
+        document.querySelector("nav a#weekallclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/week_allclient";
+        });
+        document.querySelector("nav a#allclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/allclient_client.html";
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2023 Order System</p>
+    </footer>
+</body>
+
+</html>

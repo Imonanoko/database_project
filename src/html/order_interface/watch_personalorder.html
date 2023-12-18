@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles2.css">
+    <title>客戶訂貨記錄</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>客戶訂貨記錄</h1>
+        <div id="logoutContainer">
+            <img src="/images/logout.png" onclick="logout()" alt="Logout Image">
+            <span id="logoutBtn" onclick="logout()">Log Out</span>
+        </div>
+        <script>
+            function logout() {
+                window.location.href = "/";
+            }
+        </script>
+    
+    </header>
+    <div class="container">
+        <nav>
+            <div class="dropdown">
+                <a href="#" id="MainPageLink">客戶訂貨資料</a>
+                <div class="dropdown-content">
+                    <a href="#" id="addOrderLink">新增訂單</a>
+                    <a href="#" id="SearchPageLink">查詢訂單</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" id="clientdata">客戶數據</a>
+                <div class="dropdown-content">
+                    <a href="#" id="OneCustomerTotalAmountOrderLink">某一星期某一客戶訂貨總金額</a>
+                    <a href="#" id="AllCustomerTotalAmountOrderLink">某一星期全體客戶訂貨總金額</a>
+                    <a href="#" id="AllCustomerEveryoneTotalAmountOrderLink">排序某一星期全體客戶每一人之訂貨總金額</a> <!--身分證店或訂貨總金額-->
+                </div>
+            </div>
+            <script>
+                let dropdownTimeout;
+
+                function showDropdownContent() {
+                    clearTimeout(dropdownTimeout);
+                    document.querySelector(".dropdown-content").style.display = "block";
+                }
+
+                function hideDropdownContent() {
+                    dropdownTimeout = setTimeout(function () {
+                        document.querySelector(".dropdown-content").style.display = "none";
+                    }, 500); // Adjust the delay (in milliseconds) according to your preference
+                }
+                document.querySelector(".dropdown#MainPageLinkDropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#MainPageLinkDropdown").addEventListener("mouseleave", hideDropdownContent);
+                document.querySelector(".dropdown#clientdataDropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#clientdataDropdown").addEventListener("mouseleave", hideDropdownContent);
+                document.querySelector(".dropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown").addEventListener("mouseleave", hideDropdownContent);
+                window.addEventListener("scroll", showDropdownContent);
+                window.addEventListener("scroll", hideDropdownContent);
+            </script>
+
+        </nav>
+
+        <script>
+            document.querySelector("nav a#MainPageLink").addEventListener("click", function(event) {
+                event.preventDefault();
+                window.location.href = "/order_interface";
+            });
+            document.querySelector("nav a#addOrderLink").addEventListener("click", function(event) {
+                event.preventDefault();
+                window.location.href = "/order_interface/add_order";
+            });
+            document.querySelector("nav a#SearchPageLink").addEventListener("click", function(event) {
+                event.preventDefault();
+                window.location.href = "/order_interface/search_order";
+            });
+            document.querySelector("nav a#OneCustomerTotalAmountOrderLink").addEventListener("click", function (event) {
+                event.preventDefault();
+                window.location.href = "/order_interface/watch_personalorder";
+            });
+            document.querySelector("nav a#AllCustomerTotalAmountOrderLink").addEventListener("click", function (event) {
+                event.preventDefault();
+                window.location.href = "/order_interface/watch_allamountorder";
+            });
+            document.querySelector("nav a#AllCustomerEveryoneTotalAmountOrderLink").addEventListener("click", function (event) {
+                event.preventDefault();
+                window.location.href = "/order_interface/watch_allorder";
+            });
+        </script>
+        <section>
+            <!-- 新增訂單表單 -->
+            <h3>某一星期某一位客戶訂貨總金額</h3> <!--客戶以身分證字號顯示-->
+            <form id="searchpersonalorderForm" onsubmit="submitForm(event)">
+                <label for="startdate">選擇日期範圍：</label>
+                <input type="date" id="startdate" name="date1" required>
+                到
+                <label for="enddate"></label>
+                <input type="date" id="enddate" name="date2" required><br>
+                <label for="identity">身分證字號:</label>
+                <input type="text" id="identity" name="id" required><br>
+                <button id="searchmoneybtn">查詢訂貨金額</button>
+            </form>
+            <div id="searchResults"></div>
+        </section>
+        <script>
+            $(document).ready(function () {
+                $("#searchmoneybtn").click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '/order_interface/search_personalorder_data',
+                        data: JSON.stringify({
+                            start_date: $("#startdate").val(),    // 修正这一行
+                            end_date: $("#enddate").val(),
+                            id: $("#identity").val(),
+                          
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.status === "true") {
+                                displayResultsTable(data.results);
+                            } else if (data.status === "permission denied") {
+                                alert("您沒有此權限查看此資料");
+                            } else if (data.status === "empty") {
+                                alert("此id以及星期沒有任何訂單");
+                            } else {
+                                alert("發生預期之外的錯誤");
+                            }
+                        },
+                        error: function () {
+                            alert("失败");
+                        }
+                    });
+                    return false;
+                });
+            });
+    
+
+
+
+        
+            function displayResultsTable(results) {
+                // Clear previous results
+                $("#searchResults").empty();
+
+                // Create a table and headers
+                var table = $("<table>").appendTo("#searchResults");
+                var thead = $("<thead>").appendTo(table);
+                var headerRow = $("<tr>").appendTo(thead);
+                $("<th>").text("身分證字號").appendTo(headerRow);
+                $("<th>").text("訂貨總金額").appendTo(headerRow);
+                
+                // Create table body
+                var tbody = $("<tbody>").appendTo(table);
+
+                // Populate the table with data
+                results.forEach(function (result) {
+                    var row = $("<tr>").appendTo(tbody);
+                    $("<td>").text(result.id).appendTo(row);
+                    $("<td>").text(result.total_order_money.toFixed(2)).appendTo(row);
+                    
+                });
+            }
+        </script>
+        
+    </div>
+    <footer>
+        <p>&copy; 2023 Order System</p>
+    </footer>
+</body>
+
+</html>

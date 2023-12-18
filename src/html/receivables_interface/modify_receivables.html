@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles7.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>客戶基本資料</title>
+</head>
+
+<body>
+    <header>
+        <h1>公司應收資料</h1>
+        <div id="logoutContainer">
+            <img src="/images/logout.png" onclick="logout()" alt="Logout Image">
+            <span id="logoutBtn" onclick="logout()">Log Out</span>
+        </div>
+        <script>
+            function logout() {
+                window.location.href = "/";
+            }
+        </script>
+    </header>
+    <div class="container">
+        <nav>
+            <div class="dropdown">
+                <a href="#" id="receivablesdata">公司收款資料</a>
+                <div class="dropdown-content">
+                    <a href="#" id="addreceivables">新增資料</a>
+                    <a href="#" id="deletereceivables">刪除資料</a>
+                    <a href="#" id="modifyreceivables">修改資料</a>
+                    <a href="#" id="searchreceivables">查詢資料</a>
+                </div>
+            </div>
+            <script>
+                let dropdownTimeout;
+
+                function showDropdownContent() {
+                    clearTimeout(dropdownTimeout);
+                    document.querySelector(".dropdown-content").style.display = "block";
+                }
+
+                function hideDropdownContent() {
+                    dropdownTimeout = setTimeout(function () {
+                        document.querySelector(".dropdown-content").style.display = "none";
+                    }, 500); // Adjust the delay (in milliseconds) according to your preference
+                }
+                document.querySelector(".dropdown#clientdataDropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#clientdataDropdown").addEventListener("mouseleave", hideDropdownContent);
+                document.querySelector(".dropdown#totalclientDropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#totalclientDropdown").addEventListener("mouseleave", hideDropdownContent);
+                window.addEventListener("scroll", showDropdownContent);
+                window.addEventListener("scroll", hideDropdownContent);
+            </script>
+
+        </nav>
+        <section>
+            <!-- 新增訂單表單 -->
+            <h2>修改資料</h2>
+            <!--身分證是pm key 以她去辨識修改其他資料 -->
+            <form id="modifyreceivablesForm" onsubmit="submitForm(event)">
+                輸入要修改客戶資料的身分證字號：<input type="text" id="customerID" name="customerID" required><br>
+                <button id="searchclientreceivablesbtn">確認查詢</button><br>
+                應收金額：<input type="text" id="receivablemoney" name="receivablemoney" required><br>
+                待催收金額：<input type="text" id="hastenmoney" name="hastenmoney" required><br>
+                應收日期：<input type="text" id="receivabledate" name="receivabledate" placeholder="yyyy/mm/dd" required><br>
+                <button id="modifyclientreceivablesbtn">確認修改</button>
+            </form>
+            <div id="searchResults"></div>
+            <script>
+                $(document).ready(function () {
+                    $("#searchclientreceivablesbtn").click(function () {
+                        $.ajax({
+                            type: "POST",
+                            url: '/receivables_interface/modify_receivables_search_data',
+                            async: true,
+                            data: JSON.stringify({
+                                customer_id: $("#customerID").val(),
+                            }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.status === "true") {
+                                    displayResultsTable(data.results);
+                                } else if (data.status === "duplicate_name") {
+                                    alert("顯示資料失敗，沒有此身分證");
+                                } else {
+                                    console.log(data);
+                                    alert("發生預期之外的錯誤");
+                                }
+                            },
+                            error: function () {
+                                alert("失败");
+                            }
+                        });
+                        return false;
+                    });
+                    $("#modifyclientreceivablesbtn").click(function () {
+                        $.ajax({
+                            type: "POST",
+                            url: '/receivables_interface/modify_receivables_data',
+                            async: true,
+                            data: JSON.stringify({
+                                customer_id: $("#customerID").val(),
+                                receivable_money: parseFloat($("#receivablemoney").val()),
+                                hasten_money: parseFloat($("#hastenmoney").val()),
+                                receivable_date: $("#receivabledate").val(),
+                            }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.create_flag === "true") {
+                                    alert("修改成功");
+                                } else {
+                                    alert("發生預期之外的錯誤");
+                                }
+                            },
+                            error: function () {
+                                alert("失败");
+                            }
+                        });
+                        return false;
+                    });
+                });
+                function displayResultsTable(results) {
+                    // Clear previous results
+                    $("#searchResults").empty();
+                    $("<p>").text("客戶姓名: " + results[0].name).appendTo("#searchResults");
+                    $("<p>").text("應收金額: " + results[0].money.toFixed(2)).appendTo("#searchResults");
+                    $("<p>").text("應收日期: " + results[0].date).appendTo("#searchResults");
+                    $("<p>").text("代催收金額: " + results[0].hastenmoney.toFixed(2)).appendTo("#searchResults");
+                }
+            </script>
+        </section>
+    </div>
+    <script>
+        document.querySelector("nav a#receivablesdata").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface";
+        });
+        document.querySelector("nav a#addreceivables").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface/add_receivables";
+        });
+        document.querySelector("nav a#deletereceivables").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface/delete_receivables";
+        });
+        document.querySelector("nav a#modifyreceivables").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface/modify_receivables";
+        });
+        document.querySelector("nav a#searchreceivables").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface/search_receivables";
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2023 Order System</p>
+    </footer>
+</body>
+
+</html>

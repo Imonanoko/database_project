@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles4.css">
+    <title>公司進貨資料</title>
+</head>
+
+<body>
+    <header>
+        <h1>公司進貨資料</h1>
+        <div id="logoutContainer">
+            <img src="/images/logout.png" onclick="logout()" alt="Logout Image">
+            <span id="logoutBtn" onclick="logout()">Log Out</span>
+        </div>
+        <script>
+            function logout() {
+                window.location.href = "/";
+            }
+        </script>
+    </header>
+    <div class="container">
+        <nav>
+            <div class="dropdown">
+                <a href="#" id="purchasedata">公司進貨資料</a>
+                <div class="dropdown-content">
+                    <a href="#" id="addpurchase">新增資料</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" id="searchdata">查詢資料</a>
+                <div class="dropdown-content">
+                    <a href="#" id="clientpurchase">客戶供貨資料</a>
+                    <a href="#" id="supplierdaytotalmoneypurchase">供應商每日之進貨總金額</a>
+                    <a href="#" id="supplierweektotalmoneypurchase">供應商每星期之進貨總金額</a>
+                    <a href="#" id="supplierdayproductdatapurchase">供應商每日之某一進貨物品、進貨數量與該貨品之總金額</a>
+                    <a href="#" id="supplierweekproductdatapurchase">供應商每星期之某一進貨物品、進貨數量與該貨品之總金額</a>
+                </div>
+            </div>
+            <script>
+                let dropdownTimeout;
+
+                function showDropdownContent() {
+                    clearTimeout(dropdownTimeout);
+                    document.querySelector(".dropdown-content").style.display = "block";
+                }
+
+                function hideDropdownContent() {
+                    dropdownTimeout = setTimeout(function () {
+                        document.querySelector(".dropdown-content").style.display = "none";
+                    }, 500); // Adjust the delay (in milliseconds) according to your preference
+                }
+
+                document.querySelector(".dropdown#searchdata").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#searchdata").addEventListener("mouseleave", hideDropdownContent);
+                document.querySelector(".dropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown").addEventListener("mouseleave", hideDropdownContent);
+                window.addEventListener("scroll", showDropdownContent);
+                window.addEventListener("scroll", hideDropdownContent);
+            </script>
+
+        </nav>
+        <section>
+            <h2>公司進貨資料</h2>
+            
+            
+        </section>
+        <nav id="mainpage">
+            <ul>
+                <li><a href="/client_interface">客戶基本資料</a></li>
+                <li><a href="/order_interface">客戶訂貨記錄</a></li>
+                <li><a href="/purchase_interface">公司進貨資料</a></li>
+                <li><a href="/receivables_interface">公司應收帳款</a></li>
+                <li><a href="/all_interface">整合資料</a></li>
+            </ul>
+        </nav>
+
+
+    </div>
+    <script>
+        document.querySelector("nav a#purchasedata").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface";
+        });
+        document.querySelector("nav a#addpurchase").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface/add_purchase";
+        });
+        document.querySelector("nav a#clientpurchase").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface/client_purchase";
+        });
+        document.querySelector("nav a#supplierdaytotalmoneypurchase").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface/supplier_day_total_money_purchase";
+        });
+        document.querySelector("nav a#supplierweektotalmoneypurchase").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface/supplier_week_total_money_purchase";
+        });
+        document.querySelector("nav a#supplierdayproductdatapurchase").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface/supplier_day_product_data_purchase";
+        });
+        document.querySelector("nav a#supplierweekproductdatapurchase").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface/supplier_week_product_data_purchase";
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2023 Order System</p>
+    </footer>
+</body>
+
+</html>

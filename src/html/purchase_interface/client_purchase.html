@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles5.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>公司進貨資料</title>
+</head>
+
+<body>
+    <header>
+        <h1>公司進貨資料</h1>
+        <div id="logoutContainer">
+            <img src="/images/logout.png" onclick="logout()" alt="Logout Image">
+            <span id="logoutBtn" onclick="logout()">Log Out</span>
+        </div>
+        <script>
+            function logout() {
+                window.location.href = "/";
+            }
+        </script>
+    </header>
+    <div class="container">
+        <nav>
+            <div class="dropdown">
+                <a href="#" id="purchasedata">公司進貨資料</a>
+                <div class="dropdown-content">
+                    <a href="#" id="addpurchase">新增資料</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" id="searchdata">查詢資料</a>
+                <div class="dropdown-content">
+                    <a href="#" id="clientpurchase">客戶供貨資料</a>
+                    <a href="#" id="supplierdaytotalmoneypurchase">供應商每日之進貨總金額</a>
+                    <a href="#" id="supplierweektotalmoneypurchase">供應商每星期之進貨總金額</a>
+                    <a href="#" id="supplierdayproductdatapurchase">供應商每日之某一進貨物品、進貨數量與該貨品之總金額</a>
+                    <a href="#" id="supplierweekproductdatapurchase">供應商每星期之某一進貨物品、進貨數量與該貨品之總金額</a>
+                </div>
+            </div>
+            <script>
+                let dropdownTimeout;
+
+                function showDropdownContent() {
+                    clearTimeout(dropdownTimeout);
+                    document.querySelector(".dropdown-content").style.display = "block";
+                }
+
+                function hideDropdownContent() {
+                    dropdownTimeout = setTimeout(function () {
+                        document.querySelector(".dropdown-content").style.display = "none";
+                    }, 500); // Adjust the delay (in milliseconds) according to your preference
+                }
+
+                document.querySelector(".dropdown#searchdata").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#searchdata").addEventListener("mouseleave", hideDropdownContent);
+                document.querySelector(".dropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown").addEventListener("mouseleave", hideDropdownContent);
+                window.addEventListener("scroll", showDropdownContent);
+                window.addEventListener("scroll", hideDropdownContent);
+            </script>
+        </nav>
+        <section>
+            <!-- 查詢訂單表單 -->
+            <h2>查詢客戶供貨資料</h2>
+            <form id="searchForm" onsubmit="submitForm(event)">
+                <!-- Your form fields (e.g., id and phone) -->
+                <label for="supplier">供應商:</label>
+                <input type="text" id="supplier" name="supplier" required><br>
+                <button id="searchdatabtn">查詢訂單</button>
+                <div id="searchResults"></div>
+        </section>
+        <script>
+            $(document).ready(function () {
+                $("#searchdatabtn").click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '/purchase_interface/client_purchase_data',
+                        async: true, // 使用同步方式
+                        data: JSON.stringify({
+                            supplier: $("#supplier").val(),    // 修正这一行
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.status === "true") {
+                                displayResultsTable(data.results);
+                            }
+                            else if (data.status === "false") {
+                                alert("search false，沒有這個供應商");
+                            }
+                            else if (data.status === "permission denied") {
+                                alert("您沒有此權限查看此資料")
+                            }
+                            else if (data.status === "empty") {
+                                alert("此id沒有任何訂單")
+                            }
+                            else {
+                                alert("發生預期之外的錯誤")
+                            }
+                        },
+                        error: function () {
+                            alert("失败");
+                        }
+                    });
+                    return false;
+                });
+            });
+            function displayResultsTable(results) {
+                // Clear previous results
+                $("#searchResults").empty();
+
+                // Create a table and headers
+                var table = $("<table>").appendTo("#searchResults");
+                var thead = $("<thead>").appendTo(table);
+                var headerRow = $("<tr>").appendTo(thead);
+                $("<th>").text("供應商編號").appendTo(headerRow);
+                $("<th>").text("供應商負責人").appendTo(headerRow);
+                $("<th>").text("供應商名稱").appendTo(headerRow);
+                $("<th>").text("進貨品名").appendTo(headerRow);
+                $("<th>").text("庫存位置").appendTo(headerRow);
+                $("<th>").text("規格").appendTo(headerRow);
+                $("<th>").text("進貨單位").appendTo(headerRow);
+                $("<th>").text("進貨數量").appendTo(headerRow);
+                $("<th>").text("進貨單價").appendTo(headerRow);
+                $("<th>").text("小計").appendTo(headerRow);
+                $("<th>").text("進貨日期").appendTo(headerRow);
+                // Create table body
+                var tbody = $("<tbody>").appendTo(table);
+
+                // Populate the table with data
+                results.forEach(function (result) {
+                    var row = $("<tr>").appendTo(tbody);
+                    $("<td>").text(result.supplier_id).appendTo(row);
+                    $("<td>").text(result.supplier_contact_person).appendTo(row);
+                    $("<td>").text(result.supplier_name).appendTo(row);
+                    $("<td>").text(result.product_name).appendTo(row);
+                    $("<td>").text(result.stock_location).appendTo(row);
+                    $("<td>").text(result.specification).appendTo(row);
+                    $("<td>").text(result.unit).appendTo(row);
+                    $("<td>").text(result.quantity).appendTo(row);
+                    $("<td>").text(result.unit_price.toFixed(2)).appendTo(row);
+                    $("<td>").text(result.subtotal.toFixed(2)).appendTo(row);
+                    $("<td>").text(result.purchase_date).appendTo(row);
+                });
+            }
+        </script>
+        </section>
+    </div>
+    <script>
+        document.querySelector("nav a#purchasedata").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface";
+        });
+        document.querySelector("nav a#addpurchase").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface/add_purchase";
+        });
+        document.querySelector("nav a#clientpurchase").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface/client_purchase";
+        });
+        document.querySelector("nav a#supplierdaytotalmoneypurchase").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface/supplier_day_total_money_purchase";
+        });
+        document.querySelector("nav a#supplierweektotalmoneypurchase").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface/supplier_week_total_money_purchase";
+        });
+        document.querySelector("nav a#supplierdayproductdatapurchase").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface/supplier_day_product_data_purchase";
+        });
+        document.querySelector("nav a#supplierweekproductdatapurchase").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/purchase_interface/supplier_week_product_data_purchase";
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2023 Order System</p>
+    </footer>
+</body>
+
+</html>

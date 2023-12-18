@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles2.css">
+    <title>客戶訂貨記錄</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>客戶訂貨記錄</h1>
+        <div id="logoutContainer">
+            <img src="/images/logout.png" onclick="logout()" alt="Logout Image">
+            <span id="logoutBtn" onclick="logout()">Log Out</span>
+        </div>
+        <script>
+            function logout() {
+                window.location.href = "/";
+            }
+        </script>
+    
+    </header>
+    <div class="container">
+        <nav>
+            <div class="dropdown">
+                <a href="#" id="MainPageLink">客戶訂貨資料</a>
+                <div class="dropdown-content">
+                    <a href="#" id="addOrderLink">新增訂單</a>
+                    <a href="#" id="SearchPageLink">查詢訂單</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" id="clientdata">客戶數據</a>
+                <div class="dropdown-content">
+                    <a href="#" id="OneCustomerTotalAmountOrderLink">某一星期某一客戶訂貨總金額</a>
+                    <a href="#" id="AllCustomerTotalAmountOrderLink">某一星期全體客戶訂貨總金額</a>
+                    <a href="#" id="AllCustomerEveryoneTotalAmountOrderLink">排序某一星期全體客戶每一人之訂貨總金額</a> <!--身分證店或訂貨總金額-->
+                </div>
+            </div>
+            <script>
+                let dropdownTimeout;
+
+                function showDropdownContent() {
+                    clearTimeout(dropdownTimeout);
+                    document.querySelector(".dropdown-content").style.display = "block";
+                }
+
+                function hideDropdownContent() {
+                    dropdownTimeout = setTimeout(function () {
+                        document.querySelector(".dropdown-content").style.display = "none";
+                    }, 500); // Adjust the delay (in milliseconds) according to your preference
+                }
+                document.querySelector(".dropdown#MainPageLinkDropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#MainPageLinkDropdown").addEventListener("mouseleave", hideDropdownContent);
+                document.querySelector(".dropdown#clientdataDropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#clientdataDropdown").addEventListener("mouseleave", hideDropdownContent);
+                document.querySelector(".dropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown").addEventListener("mouseleave", hideDropdownContent);
+                window.addEventListener("scroll", showDropdownContent);
+                window.addEventListener("scroll", hideDropdownContent);
+            </script>
+        </nav>
+        <section>
+            <!-- 新增訂單表單 -->
+            <h2>新增訂單</h2>
+            <!--<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> -->
+            <form id="orderForm" onsubmit="submitForm(event)">
+                身分證字號：<input type="text" id="customerID" name="customerID" required><br>
+                訂單日期：<input type="text" id="orderDate" name="orderDate" placeholder="yyyy/mm/dd" required><br>
+                預計遞交日期：<input type="text" id="expectedDeliveryDate" name="expectedDeliveryDate" placeholder="yyyy/mm/dd" required><br>
+                實際遞交日期：<input type="text" id="actualDeliveryDate" name="actualDeliveryDate" placeholder="yyyy/mm/dd"><br>
+                訂貨品名：<input type="text" id="productName" name="productName" required><br>
+                單位：<input type="text" id="unit" name="unit" required><br>
+                數量：<input type="number" id="quantityInput" name="quantity" required maxlength="8"><br>
+                <span id="unitPriceError" class="error-message">!!數量不能超過8碼</span><br>
+                單價：<input type="number" id="unitPriceInput" name="unitPrice" step="0.01"required maxlength="8"><br>
+                <span id="unitPriceError" class="error-message">!!單價不能超過8碼</span><br>
+                訂貨金額：<input type="number" id="totalmoney" name="total" required><br>
+                供應商名稱：<input type="text" id="supplierName" name="supplierName" required><br>
+                供應商編號：<input type="text" id="supplierID" name="supplierID" pattern="[0-9]{5}" title="必須為5位數字" required><br>
+                <input type="submit" id="submitOrder" name="submitOrder" value="新增訂單">
+            </form>
+        </section>
+        <script>
+            // Function to calculate order amount
+            function calculateAmount() {
+                const quantity = document.getElementById("quantityInput").value;
+                const unitPrice = document.getElementById("unitPriceInput").value;
+                const totalMoney = quantity * unitPrice;
+    
+                // Display the calculated amount
+                document.getElementById("totalmoney").value = totalMoney.toFixed(2);
+            }
+    
+            function handleInputLength(inputElement, errorElement) {
+                const maxLength = parseInt(inputElement.getAttribute("maxlength"), 10);
+                const inputValue = inputElement.value;
+    
+                if (inputValue.length > maxLength) {
+                    errorElement.style.display = "inline";
+            } else {
+                errorElement.style.display = "none";
+            }
+        }
+    
+            // Add event listeners to trigger the calculation and handle input length
+            document.getElementById("quantityInput").addEventListener("input", function () {
+                calculateAmount();
+                handleInputLength(this, document.getElementById("quantityError"));
+            });
+    
+            document.getElementById("unitPriceInput").addEventListener("input", function () {
+                calculateAmount();
+                handleInputLength(this, document.getElementById("unitPriceError"));
+            });
+    
+            // Display the "單價不能超過8碼" error only when the input is manually typed
+            document.getElementById("unitPriceInput").addEventListener("change", function () {
+                if (this.value.length > 8) {
+                    document.getElementById("unitPriceError").style.display = "inline";
+                } else {
+                    document.getElementById("unitPriceError").style.display = "none";
+                }
+            });
+            document.getElementById("quantityInput").addEventListener("change", function () {
+                if (this.value.length > 8) {
+                    document.getElementById("quantityError").style.display = "inline";
+                } else {
+                    document.getElementById("quantityError").style.display = "none";
+                }
+            });
+
+
+            $(document).ready(function () {
+                $("#submitOrder").click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '/order_interface/create_order',
+                        async: true, // 使用同步方式
+                        data: JSON.stringify({
+                            customer_id: $("#customerID").val(),
+                            order_date: $("#orderDate").val(),
+                            expected_delivery_date:$("#expectedDeliveryDate").val(),
+                            actual_delivery_date:$("#actualDeliveryDate").val(),
+                            product_name:$("#productName").val(),
+                            unit:$("#unit").val(),
+                            quantity:parseInt($("#quantityInput").val(), 10),
+                            unit_price:parseFloat($("#unitPriceInput").val()),
+                            total:parseFloat($("#totalmoney").val()),
+                            supplier_name:$("#supplierName").val(),
+                            supplier_id:$("#supplierID").val(),
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.create_flag === "true") {
+                                alert("新增成功");
+                            }
+                            else if (data.create_flag === "false") {
+                                alert("新增失敗，可能沒有此供應商編號或身分證不正確");
+                            }
+                            else {
+                                alert("發生預期之外的錯誤")
+                            }
+                        },
+                        error: function () {
+                            alert("失败");
+                        }
+                    });
+                    return false;
+                });
+            });
+        </script>
+    </div>
+    <script>
+        document.querySelector("nav a#MainPageLink").addEventListener("click", function(event) {
+            event.preventDefault();
+            window.location.href = "/order_interface";
+        });
+        document.querySelector("nav a#addOrderLink").addEventListener("click", function(event) {
+            event.preventDefault();
+            window.location.href = "/order_interface/add_order";
+        });
+        document.querySelector("nav a#SearchPageLink").addEventListener("click", function(event) {
+            event.preventDefault();
+            window.location.href = "/order_interface/search_order";
+        });
+        document.querySelector("nav a#OneCustomerTotalAmountOrderLink").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/order_interface/watch_personalorder";
+        });
+        document.querySelector("nav a#AllCustomerTotalAmountOrderLink").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/order_interface/watch_allamountorder";
+        });
+        document.querySelector("nav a#AllCustomerEveryoneTotalAmountOrderLink").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/order_interface/watch_allorder";
+        });
+    </script>
+
+
+    <footer>
+        <p>&copy; 2023 Order System</p>
+    </footer>
+</body>
+
+</html>

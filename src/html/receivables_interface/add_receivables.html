@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles6.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>公司進貨資料</title>
+</head>
+
+<body>
+    <header>
+        <h1>公司應收資料</h1>
+        <div id="logoutContainer">
+            <img src="/images/logout.png" onclick="logout()" alt="Logout Image">
+            <span id="logoutBtn" onclick="logout()">Log Out</span>
+        </div>
+        <script>
+            function logout() {
+                window.location.href = "/";
+            }
+        </script>
+    </header>
+    <div class="container">
+        <nav>
+            <div class="dropdown">
+                <a href="#" id="receivablesdata">公司收款資料</a>
+                <div class="dropdown-content">
+                    <a href="#" id="addreceivables">新增資料</a>
+                    <a href="#" id="deletereceivables">刪除資料</a>
+                    <a href="#" id="modifyreceivables">修改資料</a>
+                    <a href="#" id="searchreceivables">查詢資料</a>
+                </div>
+            </div>
+            <script>
+                let dropdownTimeout;
+
+                function showDropdownContent() {
+                    clearTimeout(dropdownTimeout);
+                    document.querySelector(".dropdown-content").style.display = "block";
+                }
+
+                function hideDropdownContent() {
+                    dropdownTimeout = setTimeout(function () {
+                        document.querySelector(".dropdown-content").style.display = "none";
+                    }, 500); // Adjust the delay (in milliseconds) according to your preference
+                }
+
+                document.querySelector(".dropdown#receivablesdata").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#receivablesdata").addEventListener("mouseleave", hideDropdownContent);
+                document.querySelector(".dropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown").addEventListener("mouseleave", hideDropdownContent);
+                window.addEventListener("scroll", showDropdownContent);
+                window.addEventListener("scroll", hideDropdownContent);
+            </script>
+
+        </nav>
+        <section>
+            <!-- 新增訂單表單 -->
+            <h2>新增資料</h2>
+            <!--<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> -->
+            <form id="addclientForm" onsubmit="submitForm(event)">
+                身分證字號：<input type="text" id="customerID" name="customerID" required><br>
+                應收金額：<input type="text" id="money" name="money" required><br>
+                應收日期：<input type="text" id="date" name="date" placeholder="yyyy/mm/dd" required><br>
+                代催收金額：<input type="text" id="hastenmoney" name="hastenmoney" required><br>
+                客戶姓名：<input type="text" id="name" name="name" required><br>                
+                <input type="submit" id="submitreceivables" name="submitreceivables" value="確認新增">
+            </form>
+            <script>
+                $(document).ready(function () {
+                    $("#submitreceivables").click(function () {
+                        $.ajax({
+                            type: "POST",
+                            url: '/receivables_interface/add_receivables_data',
+                            async: true, // 使用同步方式
+                            data: JSON.stringify({
+                                customer_id: $("#customerID").val(),
+                                money: parseFloat($("#money").val()),
+                                date: $("#date").val(),
+                                hastenmoney: parseFloat($("#hastenmoney").val()),
+                                name: $("#name").val(),
+                            }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.create_flag === "true") {
+                                    alert("新增成功");
+                                }
+                                else {
+                                    alert("查無此身分證")
+                                }
+                            },
+                            error: function () {
+                                alert("失败");
+                            }
+                        });
+                        return false;
+                    });
+                });
+            </script>
+
+        </section>
+
+
+    </div>
+    <script>
+        document.querySelector("nav a#receivablesdata").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface";
+        });
+        document.querySelector("nav a#addreceivables").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface/add_receivables";
+        });
+        document.querySelector("nav a#deletereceivables").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface/delete_receivables";
+        });
+        document.querySelector("nav a#modifyreceivables").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface/modify_receivables";
+        });
+        document.querySelector("nav a#searchreceivables").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface/search_receivables";
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2023 Order System</p>
+    </footer>
+</body>
+
+</html>

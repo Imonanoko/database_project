@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles3.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>客戶基本資料</title>
+</head>
+
+<body>
+    <header>
+        <h1>客戶基本資料</h1>
+        <div id="logoutContainer">
+            <img src="/images/logout.png" onclick="logout()" alt="Logout Image">
+            <span id="logoutBtn" onclick="logout()">Log Out</span>
+        </div>
+        <script>
+            function logout() {
+                window.location.href = "/";
+            }
+        </script>
+    </header>
+    <div class="container">
+        <nav>
+            <div class="dropdown">
+                <a href="#" id="clientdata">客戶基本資料</a>
+                <div class="dropdown-content">
+                    <a href="#" id="addclient">新增資料</a>
+                    <a href="#" id="deleteclient">刪除資料</a>
+                    <a href="#" id="removeclient">修改資料</a>
+                    <a href="#" id="searchclient">查詢資料</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" id="allclient">客戶數據</a>
+                <div class="dropdown-content">
+                    <a href="#" id="monthclient">每月訂貨總金額</a>
+                    <a href="#" id="weekclient">每週訂貨總金額</a>
+                    <a href="#" id="monthallclient">總客戶每月訂貨總金額</a>
+                    <a href="#" id="weekallclient">總客戶每週訂貨總金額</a>
+                </div>
+            </div>
+            <script>
+                let dropdownTimeout;
+
+                function showDropdownContent() {
+                    clearTimeout(dropdownTimeout);
+                    document.querySelector(".dropdown-content").style.display = "block";
+                }
+
+                function hideDropdownContent() {
+                    dropdownTimeout = setTimeout(function () {
+                        document.querySelector(".dropdown-content").style.display = "none";
+                    }, 500); // Adjust the delay (in milliseconds) according to your preference
+                }
+                document.querySelector(".dropdown#clientdataDropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#clientdataDropdown").addEventListener("mouseleave", hideDropdownContent);
+                document.querySelector(".dropdown#totalclientDropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#totalclientDropdown").addEventListener("mouseleave", hideDropdownContent);
+                window.addEventListener("scroll", showDropdownContent);
+                window.addEventListener("scroll", hideDropdownContent);
+            </script>
+
+        </nav>
+        <section>
+            <!-- 新增訂單表單 -->
+            <h2>新增資料</h2>
+            <!--<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> -->
+            <form id="addclientForm" onsubmit="submitForm(event)">
+                客戶姓名：<input type="text" id="name" name="name" required><br>
+                身分證字號：<input type="text" id="customerID" name="customerID" required><br>
+                電話：<input type="text" id="phone" name="phone" required><br>
+                年齡：<input type="text" id="age" name="age" required><br>
+                住址：<input type="text" id="address" name="address" required><br>
+                職業：<input type="text" id="occupation" name="occupation" required><br>
+                登載日期：<input type="text" id="addDate" name="addDate" placeholder="yyyy/mm/dd" required><br>
+                照片：<input type="file" id="picture" name="picture" accept=".jpg, .jpeg, .png" required><br>
+                消費狀態：<select id="userornot" name="userornot" required>
+                    <option value="正常">正常</option>
+                    <option value="停用">停用</option>
+                </select><br>
+                <input type="submit" id="submitclientbtn" name="submitclientbtn" value="確認新增">
+            </form>
+            <script>
+                $(document).ready(function () {
+                    $("#submitclientbtn").click(function () {
+                        var formData = new FormData();
+                        formData.append('name', $("#name").val());
+                        formData.append('customer_id', $("#customerID").val());
+                        formData.append('phone', $("#phone").val());
+                        formData.append('age', parseInt($("#age").val(), 10));
+                        formData.append('address', $("#address").val());
+                        formData.append('occupation', $("#occupation").val());
+                        formData.append('add_date', $("#addDate").val());
+                        formData.append('picture', $("#picture")[0].files[0]);
+                        formData.append('userornot', $("#userornot").val());
+                
+                        $.ajax({
+                            type: "POST",
+                            url: '/client_interface/add_client_data',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function (data) {
+                                if (data.create_flag === "true") {
+                                    alert("成功新增");
+                                }
+                                else if (data.create_flag === "false") {
+                                    alert("search false，沒有這個身分證");
+                                }
+                                else if (data.create_flag === "duplicate_id") {
+                                    alert("id已經被登記")
+                                }
+                                else if (data.create_flag === "empty") {
+                                    alert("此id沒有任何訂單")
+                                }
+                                else {
+                                    alert("發生預期之外的錯誤")
+                                }
+                            },
+                            error: function () {
+                                alert("失败");
+                            }
+                        });
+                        return false;
+                    });
+                });
+            </script>
+        </section>
+    </div>
+    <script>
+        document.querySelector("nav a#clientdata").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface";
+        });
+        document.querySelector("nav a#addclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/add_client";
+        });
+        document.querySelector("nav a#deleteclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/delete_client";
+        });
+        document.querySelector("nav a#removeclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/modify_client";
+        });
+        document.querySelector("nav a#searchclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/search_client";
+        });
+        document.querySelector("nav a#monthclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/month_client";
+        });
+        document.querySelector("nav a#weekclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/week_client";
+        });
+        document.querySelector("nav a#monthallclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/month_allclient";
+        });
+        document.querySelector("nav a#weekallclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/client_interface/week_allclient";
+        });
+        document.querySelector("nav a#allclient").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "allclient_client";
+        });
+    </script>
+    <footer>
+        <p>&copy; 2023 Order System</p>
+    </footer>
+</body>
+
+</html>

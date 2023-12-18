@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles6.css">
+    <title>公司進貨資料</title>
+</head>
+
+<body>
+    <header>
+        <h1>公司應收資料</h1>
+        <div id="logoutContainer">
+            <img src="/images/logout.png" onclick="logout()" alt="Logout Image">
+            <span id="logoutBtn" onclick="logout()">Log Out</span>
+        </div>
+        <script>
+            function logout() {
+                window.location.href = "/";
+            }
+        </script>
+    </header>
+    <div class="container">
+        <nav>
+            <div class="dropdown">
+                <a href="#" id="receivablesdata">公司收款資料</a>
+                <div class="dropdown-content">
+                    <a href="#" id="addreceivables">新增資料</a>
+                    <a href="#" id="deletereceivables">刪除資料</a>
+                    <a href="#" id="modifyreceivables">修改資料</a>
+                    <a href="#" id="searchreceivables">查詢資料</a>
+                </div>
+            </div>
+            <script>
+                let dropdownTimeout;
+
+                function showDropdownContent() {
+                    clearTimeout(dropdownTimeout);
+                    document.querySelector(".dropdown-content").style.display = "block";
+                }
+
+                function hideDropdownContent() {
+                    dropdownTimeout = setTimeout(function () {
+                        document.querySelector(".dropdown-content").style.display = "none";
+                    }, 500); // Adjust the delay (in milliseconds) according to your preference
+                }
+
+                document.querySelector(".dropdown#receivablesdata").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown#receivablesdata").addEventListener("mouseleave", hideDropdownContent);
+                document.querySelector(".dropdown").addEventListener("mouseenter", showDropdownContent);
+                document.querySelector(".dropdown").addEventListener("mouseleave", hideDropdownContent);
+                window.addEventListener("scroll", showDropdownContent);
+                window.addEventListener("scroll", hideDropdownContent);
+            </script>
+
+        </nav>
+        <section>
+            <h2>公司收款資料</h2>
+        </section>
+        <nav id="mainpage">
+            <ul>
+                <li><a href="/client_interface">客戶基本資料</a></li>
+                <li><a href="/order_interface">客戶訂貨記錄</a></li>
+                <li><a href="/purchase_interface">公司進貨資料</a></li>
+                <li><a href="/receivables_interface">公司應收帳款</a></li>
+                <li><a href="/all_interface">整合資料</a></li>
+            </ul>
+        </nav>
+
+
+    </div>
+    <script>
+        document.querySelector("nav a#receivablesdata").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface";
+        });
+        document.querySelector("nav a#addreceivables").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface/add_receivables";
+        });
+        document.querySelector("nav a#deletereceivables").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface/delete_receivables";
+        });
+        document.querySelector("nav a#modifyreceivables").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface/modify_receivables";
+        });
+        document.querySelector("nav a#searchreceivables").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/receivables_interface/search_receivables";
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2023 Order System</p>
+    </footer>
+</body>
+
+</html>

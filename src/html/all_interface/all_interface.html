@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles8.css?v=1">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>整合資料</title>
+</head>
+
+<body>
+    <header>
+        <h1>整合資料</h1>
+        <div id="logoutContainer">
+            <img src="/images/logout.png" onclick="logout()" alt="Logout Image">
+            <span id="logoutBtn" onclick="logout()">Log Out</span>
+        </div>
+        <script>
+            function logout() {
+                window.location.href = "/";
+            }
+        </script>
+
+    </header>
+    <div class="container">
+        <nav id="alllist">
+            <ul>
+                <li><a href="/all_interface">跨資料庫整合資料</a></li>
+                <li><a href="/all_interface/client_month_money_all">每一客戶每月訂貨總金額</a></li>
+                <li><a href="/all_interface/client_week_money_all">每一客戶每周訂貨總金額</a></li>
+                <li><a href="/all_interface/supplier_day_money_all">每一供應商每日之進貨總金額</a></li>
+                <li><a href="/all_interface/supplier_week_money_all">每一供應商每星期之進貨總金額</a></li>
+                <li><a href="/all_interface/supplier_day_product_data_all">每一供應商每日之某一進貨物品、進貨數量與該貨品之總金額</a></li>
+                <li><a href="/all_interface/supplier_week_product_data_all">每一供應商每星期之某一進貨物品、進貨數量與該貨品之總金額</a></li>
+                <li><a href="/all_interface/week_client_money_all">某一星期某一位客戶訂貨總金額</a></li>
+                <li><a href="/all_interface/week_all_client_money_all">排序某一星期全體客戶每一人之訂貨總金額</a></li>
+            </ul>
+        </nav>
+        <script>
+            let dropdownTimeout;
+            function showDropdownContent() {
+                clearTimeout(dropdownTimeout);
+                document.querySelector(".dropdown-content").style.display = "block";
+            }
+
+            function hideDropdownContent() {
+                dropdownTimeout = setTimeout(function () {
+                    document.querySelector(".dropdown-content").style.display = "none";
+                }, 500); // Adjust the delay (in milliseconds) according to your preference
+            }
+
+            document.querySelector(".dropdown#clientdata").addEventListener("mouseenter", showDropdownContent);
+            document.querySelector(".dropdown#clientdata").addEventListener("mouseleave", hideDropdownContent);
+            document.querySelector(".dropdown#allclient").addEventListener("mouseenter", showDropdownContent);
+            document.querySelector(".dropdown#allclient").addEventListener("mouseleave", hideDropdownContent);
+            window.addEventListener("scroll", showDropdownContent);
+            window.addEventListener("scroll", hideDropdownContent);
+        </script>
+        <section>
+            <!-- 新增訂單表單 -->
+            <h2>跨資料庫整合資料</h2>
+        </section>
+        <nav id="mainpage">
+            <ul>
+                <li><a href="/client_interface">客戶基本資料</a></li>
+                <li><a href="/order_interface">客戶訂貨記錄</a></li>
+                <li><a href="/purchase_interface">公司進貨資料</a></li>
+                <li><a href="/receivables_interface">公司應收帳款</a></li>
+                <li><a href="/all_interface">整合資料</a></li>
+            </ul>
+        </nav>
+
+
+    </div>
+    <script>
+        document.querySelector("nav a#alldata").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/all_interface";
+        });
+        document.querySelector("nav a#clientweekmoneyall").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/all_interface/client_week_money_all";
+        });
+        document.querySelector("nav a#supplierdaymoneyall").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/all_interface/supplier_day_money_all";
+        });
+        document.querySelector("nav a#supplierweekmoneyall").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/all_interface/supplier_week_money_all";
+        });
+        document.querySelector("nav a#supplierdayproductdataall").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/all_interface/supplier_day_product_data_all";
+        });
+        document.querySelector("nav a#supplierweekproductdataall").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/all_interface/supplier_week_product_data_all";
+        });
+        document.querySelector("nav a#weekclientmoneyall").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/all_interface/week_client_money_all";
+        });
+        document.querySelector("nav a#weekallclientmoneyall").addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "/all_interface/week_allclient_money_all";
+        });
+
+    </script>
+
+
+    <footer>
+        <p>&copy; 2023 Order System</p>
+    </footer>
+</body>
+
+</html>

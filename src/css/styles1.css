@@ -1,0 +1,243 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#logoutContainer {
+    margin-top: -30px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 20px; /* Add additional margin if needed */
+}
+#allclient-content {
+    min-height: 300px; /* Adjust the width for ¬d¸ß¸ê®Æ dropdown */
+}
+#logoutContainer img {
+    margin-top: -30px;
+    width: 30px; /* Adjust the width as needed */
+    height: 30px; /* Adjust the height as needed */
+    margin-right: 5px; /* Adjust the spacing between the image and the button */
+}
+#logoutBtn {
+    cursor: pointer;
+    margin-top: -30px;
+    margin-left: auto;
+    margin-right: 20px; /* Add additional margin if needed */
+    font-family: Arial, sans-serif;
+}
+h2{
+    padding: 0px 0px 0px 80px;
+}
+.container {
+    display: flex;/* Change flex direction to column */
+    min-height: 100vh; 
+}
+form input {
+    margin-bottom: 10px; /* ?]?w???????Z */
+    margin-left: 10px;
+}
+form input[name="submitOrder"] {
+    margin-left: 100px; /* ????n???k?????Z */
+}
+nav {
+    text-align: left;
+    background-color: #f2f2f2;
+    padding: 25px 20px 0px 20px;
+    min-width: 250px;
+    max-height: 120px;
+    display: flex;
+    flex-direction: column; 
+    margin-left: 20px;
+    margin-top: 50px;
+    border-radius: 10px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+section {
+    flex: 1;
+    padding: 20px;
+    overflow: auto; 
+    box-sizing: border-box; 
+    margin-left: 40px;
+}
+
+footer {
+    text-align: center;
+    width: 100%;
+    min-height: 5px;
+    clear: both;
+    padding: 1px 0; /* Add padding to create space between the content and footer */
+    background-color: #f2f2f2; /* Add background color for better visibility */
+    border-top: 1px solid #ddd; /* Add a border at the top of the footer */
+}
+nav a, button {
+    display: block;
+    padding: 10px 0px 10px 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+nav a:hover {
+    background-color: #bbb;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    min-height: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 5px;
+    overflow: auto;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 10px 10px 10px 10px;
+    text-decoration: none;
+    display: block;
+    border-radius: 40px;
+    background-color: #f2f2f2;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+/* Added rule to hide dropdown content after delay when not hovering */
+.dropdown:not(:hover) .dropdown-content {
+    transition-delay: 2s; /* Set your preferred delay */
+    opacity: 0;
+    visibility: hidden;
+}
+
+.dropdown a {
+    display: block;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: #ddd;
+    text-align: center;
+}
+nav a#addOrderLink,
+nav a#SearchPageLink {
+    background-color: hsl(0,0,0,2); 
+    color: rgb(0, 0, 0);
+    padding: 15px; 
+    border-radius: 10px; 
+    text-align: center; 
+    font-size: 16px; 
+    margin-bottom: 20px; 
+}
+
+nav a#addOrderLink,
+nav a#SearchPageLink {
+    margin: 10px; 
+}
+
+nav a#addOrderLink:hover,
+nav a#SearchPageLink:hover {
+    background-color:  #ddd; 
+}
+
+nav a#OneCustomerTotalAmountOrderLink,
+nav a#AllCustomerTotalAmountOrderLink,
+nav a#AllCustomerEveryoneTotalAmountOrderLink{
+    background-color: hsl(0,0,0,2); /* ???I???C?? */
+    color: rgb(0, 0, 0); /* ??r?C?? */
+    padding: 15px; /* ??????R */
+    border-radius: 10px; /* ?N???s??????? */
+    text-align: center; /* ??r?m?? */
+    font-size:13px; /* ??r?j?p */
+    margin-bottom: 20px; /* ???????Z */
+}
+
+/* ?b?|?P?K?[??h????? */
+nav a#OneCustomerTotalAmountOrderLink,
+nav a#AllCustomerTotalAmountOrderLink,
+nav a#AllCustomerEveryoneTotalAmountOrderLink {
+    margin: 10px; /* ?i????n??? */
+}
+
+/* ??????a??????? */
+nav a#OneCustomerTotalAmountOrderLink:hover,
+nav a#AllCustomerTotalAmountOrderLink:hover,
+nav a#AllCustomerEveryoneTotalAmountOrderLink:hover {
+    background-color:  #ddd;; /* ????a??????I???C?? */
+}
+#mainpage {
+    margin-top: 10px;
+    margin-right: 20px;
+    margin-left: auto;
+    text-align: right;
+    min-width: 220px;
+    max-height: 300px;
+}
+
+#mainpage ul {
+    list-style: none;
+    padding: 0;
+}
+
+#mainpage ul li {
+    display: block; /* Change to block for vertical alignment */
+    margin-bottom: 10px; /* Add margin between list items */
+    text-align: center;
+    min-width: 100px;
+    border-radius: 15px;
+}
+
+#mainpage a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    border-radius: 10px;
+    background-color: #ddd;
+    padding: 10px 15px;
+    display: block; /* Ensure each link takes the full width */
+}
+
+#mainpage a:hover {
+    background-color: #bbb;
+}
+.highlight .ui-state-default {
+    background: blue;
+    color: white;
+}

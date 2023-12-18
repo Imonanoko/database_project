@@ -1,0 +1,441 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    padding-bottom: 50px;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Style for the disabled dates */
+input[type="date"]:disabled {
+    color: gray;
+}
+
+/* Additional styling to make it visually distinct */
+input[type="date"]:disabled::before {
+    content: '\2022'; /* Unicode bullet character */
+    margin-right: 5px;
+}
+
+#submitclient {
+    margin-top: 10px;
+    margin-left: 100px;
+}
+
+#allclient-content {
+    min-height: 600px;
+    /* Adjust the width for ¬d¸ß¸ê®Æ dropdown */
+}
+
+#searchdata-content {
+    min-height: 300px;
+    /* Adjust the width for ¬d¸ß¸ê®Æ dropdown */
+}
+
+#deletesearchclientbtn {
+    margin-top: 10px;
+    margin-left: 170px;
+    margin-bottom: 15px;
+}
+
+#searchmodifyclientbtn {
+    margin-top: 10px;
+    margin-left: 170px;
+    margin-bottom: 15px;
+}
+
+#searchclientbtn {
+
+    margin-left: 100px;
+    margin-top: 10px;
+}
+
+#searchmonthclientbtn {
+
+    margin-left: 90px;
+    margin-top: 10px;
+}
+
+#searchmonthallclientbtn {
+
+    margin-left: 90px;
+    margin-top: 10px;
+}
+
+#searchweekclientbtn {
+
+    margin-left: 140px;
+    margin-top: 10px;
+}
+
+#searchweekallclientbtn {
+
+    margin-left: 140px;
+    margin-top: 10px;
+}
+
+#yearallclientbtn {
+
+    margin-left: 100px;
+    margin-top: 10px;
+}
+
+#yearclientbtn {
+
+    margin-left: 100px;
+    margin-top: 10px;
+}
+
+#deleteclientbtn {
+    margin-top: 15px;
+    margin-left: 4px;
+}
+
+#modifyclientbtn {
+    margin-top: 10px;
+    margin-left: 90px;
+}
+
+#printmoneybtn {
+    margin-top: 10px;
+    margin-left: 80px;
+}
+
+#submitOrder {
+    margin-top: 10px;
+}
+#sortsmallbtn {
+    margin-top: 10px;
+    margin-left: 20px;
+}
+#sortbigbtn {
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+#searchbtn {
+    margin-top: 10px;
+    margin-left: 100px;
+}
+
+#searchmoneybtn {
+    margin-top: 10px;
+    margin-left: 150px;
+}
+#sortsmallbtn {
+    margin-top: 10px;
+    margin-left: 20px;
+}
+#sortbigbtn {
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+#logoutContainer {
+    margin-top: -30px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 20px;
+    /* Add additional margin if needed */
+}
+
+#logoutContainer img {
+    margin-top: -30px;
+    width: 30px;
+    /* Adjust the width as needed */
+    height: 30px;
+    /* Adjust the height as needed */
+    margin-right: 5px;
+    /* Adjust the spacing between the image and the button */
+}
+
+#logoutBtn {
+    cursor: pointer;
+    margin-top: -30px;
+    margin-left: auto;
+    margin-right: 20px;
+    /* Add additional margin if needed */
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    padding: 0px 0px 0px 80px;
+}
+
+h3 {
+    padding: 0px 0px 0px 40px;
+    font-size: 18px;
+}
+
+h4 {
+    line-height: 3;
+}
+
+.container {
+    display: flex;
+}
+
+form input {
+    margin-bottom: 10px;
+    /* ï¿½]ï¿½wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Z */
+    margin-left: 10px;
+}
+
+form input[name="submitOrder"] {
+    margin-left: 100px;
+    /* ï¿½Ú¾Ú»Ý­nï¿½Õ¾ï¿½kï¿½äªºï¿½ï¿½ï¿½Z */
+}
+
+nav {
+    text-align: left;
+    background-color: #f2f2f2;
+    padding: 25px 20px 20px 20px;
+    min-width: 250px;
+    max-height: 100px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    margin-top: 50px;
+    border-radius: 10px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+section {
+    flex: 1;
+    font-size: 16px;
+    padding: 20px;
+    overflow: auto;
+    box-sizing: border-box;
+    margin-left: 40px;
+    line-height: 1.5;
+}
+
+footer {
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    padding: 0px;
+    /* Add padding as needed */
+    z-index: 1;
+    /* Use a lower z-index value */
+    background-color: #f2f2f2;
+
+}
+
+#tableContainer {
+    overflow-x: auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    min-width: 100px;
+    /* Set a minimum width for each cell */
+    white-space: nowrap;
+    /* Prevent text from wrapping */
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+nav a {
+    display: block;
+    padding: 10px 0px 10px 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    border-radius: 15px;
+    background-color: #ddd;
+    border-radius: 20px;
+}
+
+nav a:hover {
+    background-color: #bbb;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    top: 100%;
+    left: 0;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    min-height: 100px;
+    box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 0px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    overflow: auto;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 10px 10px 10px 10px;
+    text-decoration: none;
+    display: block;
+    border-radius: 40px;
+    background-color: #f2f2f2;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+/* Added rule to hide dropdown content after delay when not hovering */
+.dropdown:not(:hover) .dropdown-content {
+    transition-delay: 2s;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.dropdown a {
+    display: block;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: #ddd;
+    text-align: center;
+}
+
+#searchResults {
+    margin-top: 20px;
+    /* Adjust the value as needed */
+}
+
+nav a#addOrderLink,
+nav a#SearchPageLink {
+    background-color: hsl(0, 0, 0, 2);
+    color: rgb(0, 0, 0);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+nav a#addOrderLink,
+nav a#SearchPageLink {
+    margin: 10px;
+}
+
+nav a#addOrderLink:hover,
+nav a#SearchPageLink:hover {
+    background-color: #ddd;
+}
+
+nav a#OneCustomerTotalAmountOrderLink,
+nav a#AllCustomerTotalAmountOrderLink,
+nav a#AllCustomerEveryoneTotalAmountOrderLink {
+    background-color: hsl(0, 0, 0, 2);
+    color: rgb(0, 0, 0);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 20px;
+
+}
+
+
+nav a#OneCustomerTotalAmountOrderLink,
+nav a#AllCustomerTotalAmountOrderLink,
+nav a#AllCustomerEveryoneTotalAmountOrderLink {
+    margin: 10px;
+
+}
+
+nav a#OneCustomerTotalAmountOrderLink:hover,
+nav a#AllCustomerTotalAmountOrderLink:hover,
+nav a#AllCustomerEveryoneTotalAmountOrderLink:hover {
+    background-color: #ddd;
+    ;
+
+}
+
+#mainpage {
+    margin-top: 10px;
+    margin-right: 20px;
+    margin-left: auto;
+    text-align: right;
+    min-width: 220px;
+    max-height: 280px;
+}
+
+#mainpage ul {
+    list-style: none;
+    padding: 0;
+}
+
+#mainpage ul li {
+    display: block;
+    /* Change to block for vertical alignment */
+    margin-bottom: 10px;
+    /* Add margin between list items */
+    text-align: center;
+    min-width: 100px;
+    border-radius: 15px;
+}
+
+#mainpage a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    border-radius: 10px;
+    background-color: #ddd;
+    padding: 10px 15px;
+    display: block;
+    /* Ensure each link takes the full width */
+}
+
+#mainpage a:hover {
+    background-color: #bbb;
+}
+
+.highlight .ui-state-default {
+    background: blue;
+    color: white;
+}
