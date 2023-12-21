@@ -24,6 +24,7 @@ AccountsReceivable attributes:
 
 ![image](https://github.com/Imonanoko/database_project/assets/99231417/c62fe7fd-5b35-4592-9cf8-79e6586f407e)
 
+Please make sure to install Rust first.
 Start WEB server:
 ```
 cargo run
