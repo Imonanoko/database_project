@@ -108,13 +108,13 @@
                                     alert("成功新增");
                                 }
                                 else if (data.create_flag === "false") {
-                                    alert("search false，沒有這個身分證");
+                                    alert("沒有這個身分證");
                                 }
                                 else if (data.create_flag === "duplicate_id") {
-                                    alert("id已經被登記")
+                                    alert("id已經被登記");
                                 }
-                                else if (data.create_flag === "empty") {
-                                    alert("此id沒有任何訂單")
+                                else if (data.create_flag === "error message") {
+                                    alert(data.error_msg);
                                 }
                                 else {
                                     alert("發生預期之外的錯誤")
