@@ -20,7 +20,6 @@ pub async fn login_verification(
         Ok(conn) => conn,
         Err(_) => return HttpResponse::InternalServerError().finish(),
     };
-    // println!("Received data: {:?}", data);
     // 讀取前端的資料
     let _id = &data.id;
     let _phone = &data.phone;
@@ -51,9 +50,6 @@ pub async fn login_verification(
         session
             .insert("is_admin", is_admin)
             .expect("is_admin set failed");
-        //         let first_row = &result[0];//讀取特定欄位的值
-        //         let id_number = &first_row.0;
-        //         println!("id_number: {}", id_number);
         let response_body = serde_json::json!({
             "login_flag": "true",
         });

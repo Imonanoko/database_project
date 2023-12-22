@@ -6,7 +6,9 @@ use futures::{StreamExt, TryStreamExt};
 use mysql::prelude::*;
 use mysql::*;
 use serde::Deserialize;
-//照片問題待解決
+//需要再main裡面先引入
+use crate::backends::library::{error_msg,date_check};
+
 #[derive(Deserialize, Debug)]
 pub struct Data {
     name: String,
@@ -70,6 +72,38 @@ pub async fn add_client_data(
                         }
                     }
                 }
+                //資料邏輯判斷
+                if data.name.len()>12 {
+                    return error_msg("客戶姓名應該小於13").await;
+                }
+                if data.name.len()==0 {
+                    return error_msg("客戶姓名不能為空").await;
+                }
+                if data.customer_id.len()!=10 {
+                    return error_msg("身分證字號應該為十碼").await;
+                }
+                if data.phone.len()!=10 {
+                    return error_msg("電話號碼應該為十碼").await;
+                }
+                if data.age <0 {
+                    return error_msg("年齡不應該是負數").await;
+                }
+                if data.age == 0 {
+                    return error_msg("年齡不能為空").await;
+                }
+                if data.address.len() == 0 {
+                    return error_msg("地址不能為空").await;
+                }
+                if data.address.len() > 30 {
+                    return error_msg("地址不能超過30字").await;
+                }
+                if data.occupation.len() > 12 {
+                    return error_msg("職業最多12個字").await;
+                }
+                if !date_check(&data.address) {
+                    return error_msg("日期格式錯誤").await;
+                } 
+
                 let mut conn = match db.get_conn() {
                     Ok(conn) => conn,
                     Err(_) => return error_handler().await,
@@ -111,6 +145,7 @@ pub async fn add_client_data(
                                     .json(response_body);
                             }
                             Err(_e) => {
+                                println!("建立客戶資料失敗，{}",_e);
                                 let params = params! {
                                     "id_number" => &data.customer_id,
                                 };

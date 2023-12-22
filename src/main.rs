@@ -41,6 +41,7 @@ mod backends {
     pub mod week_allclient_data;
     pub mod week_client_data;
     pub mod week_client_money_all_data;
+    pub mod library;
 }
 mod http_status;
 mod jump_page;
@@ -71,7 +72,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(Data::new(pool.clone()))
-            .wrap(CookieSession::signed(&key).secure(false))
+            .wrap(CookieSession::signed(&key).secure(false).http_only(true).same_site(actix_web::cookie::SameSite::Strict))
             .service(fs::Files::new("/images", &static_files_images).show_files_listing())
             .service(fs::Files::new("/css", &static_files_css).show_files_listing()) // 添加静态文件服务
             .service(web::resource("/").to(jump_page::login)) //跳轉登入介面
