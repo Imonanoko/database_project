@@ -1,5 +1,6 @@
 use actix_web::HttpResponse;
 use chrono::NaiveDate;
+use std::cmp::Ordering;
 pub async fn error_msg(msg:&str)->HttpResponse{
     let response_body = serde_json::json!({
         "create_flag":"error message",
@@ -29,5 +30,21 @@ pub fn date_check(date: &str) -> bool {
             NaiveDate::from_ymd_opt(y, m, d).is_some()
         }
         _ => false,
+    }
+}
+
+
+
+pub fn compare_dates(date1: &str, date2: &str) -> bool {
+    let naive_date1 = NaiveDate::parse_from_str(date1, "%Y-%m-%d")
+        .expect("Invalid format for date1");
+    let naive_date2 = NaiveDate::parse_from_str(date2, "%Y-%m-%d")
+        .expect("Invalid format for date2");
+
+    let x:Ordering = naive_date1.cmp(&naive_date2);
+    match x {
+        Ordering::Less => return true,
+        Ordering::Greater => return false,
+        Ordering::Equal => return false,
     }
 }

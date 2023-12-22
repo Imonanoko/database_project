@@ -4,19 +4,26 @@ use actix_web::{web, HttpResponse};
 use mysql::prelude::*;
 use mysql::*;
 use serde::Deserialize;
+use crate::backends::library::{error_msg,date_check,compare_dates};
 #[derive(Deserialize, Debug)]
 pub struct Data {
     customer_id: String,
     order_date: String,
     expected_delivery_date: String,
     actual_delivery_date: String,
+    // product_name: String,
+    // unit: String,
+    quantity: i32,
+    // unit_price: f32,
+    // total: f32,
+    // supplier_name: String,
+    supplier_id: String,
+}
+struct SupplierData {
     product_name: String,
     unit: String,
-    quantity: i32,
     unit_price: f32,
-    total: f32,
     supplier_name: String,
-    supplier_id: String,
 }
 
 pub async fn create_order(
@@ -32,19 +39,65 @@ pub async fn create_order(
                 let order_date = data.order_date.clone().replace("/", "-");
                 let expected_delivery_date = data.expected_delivery_date.clone().replace("/", "-");
                 let actual_delivery_date = data.actual_delivery_date.clone().replace("/", "-");
-                let product_name = data.product_name.clone();
-                let unit = data.unit.clone();
+                // let product_name = data.product_name.clone();
+                // let unit = data.unit.clone();
                 let quantity = data.quantity;
-                let unit_price = data.unit_price;
-                let order_amount = data.total;
-                let supplier_name = data.supplier_name.clone();
-                let supplier_id = data.supplier_id.clone();
-
+                // let unit_price = data.unit_price;
+                // let order_amount = data.total;
+                // let supplier_name = data.supplier_name.clone();
+                let supplier_id = &data.supplier_id;
                 // Creating a connection from the pool
                 let mut conn = match db.get_conn() {
                     Ok(conn) => conn,
                     Err(_) => return error_handler().await,
                 };
+                let supplier_data: Option<SupplierData> = match conn.exec_first(
+                    "SELECT SupplierName, Unit, UnitPrice, ProductName FROM PurchaseData WHERE SupplierID = :supplier_id ",
+                    params! {
+                        "supplier_id" => &data.supplier_id,
+                    }
+                ) {
+                    Ok(data) => data.map(|(supplier_name, unit, unit_price, product_name)| {
+                        SupplierData {
+                            supplier_name,
+                            unit,
+                            unit_price,
+                            product_name,
+                        }
+                    }),
+                    Err(e) => {
+                        eprintln!("Database query error: {:?}", e);
+                        return error_handler().await; 
+                    }
+                };
+                let (product_name,unit_price,supplier_name,unit) = match supplier_data {
+                    Some(data)=>{
+                        (data.product_name,data.unit_price,data.supplier_name,data.unit)
+                    }
+                    None=>{
+                        return error_msg("查無此供應商編號").await;
+                    }
+                };
+                let order_amount:f32 = quantity as f32 * unit_price;
+                if id_number.len() !=10 {
+                    return error_msg("身分證字號應該為十碼").await;
+                }
+                if !date_check(&order_date) {
+                    return error_msg("訂單日期格式錯誤").await;
+                } 
+                if !date_check(&expected_delivery_date) {
+                    return error_msg("預計遞交日期格式錯誤").await;
+                } 
+                if !date_check(&actual_delivery_date) {
+                    return error_msg("實際遞交日期格式錯誤").await;
+                } 
+                if !compare_dates(&order_date, &expected_delivery_date){
+                    return error_msg("預計遞交日期不會比訂單日期早").await;
+                }
+                if !compare_dates(&order_date, &actual_delivery_date){
+                    return error_msg("實際遞交日期不會比訂單日期早").await;
+                }
+                
 
                 // Executing the insertion query
                 let query = format!(
