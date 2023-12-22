@@ -4,6 +4,7 @@ use actix_web::{web, HttpResponse};
 use mysql::prelude::*;
 use mysql::*;
 use serde::Deserialize;
+use crate::backends::library::error_msg;
 
 #[derive(Deserialize, Debug)]
 pub struct Data {
@@ -19,6 +20,15 @@ pub async fn modify_client_modify_data(
     match session.get::<bool>("is_admin") {
         Ok(Some(is_admin)) => {
             if is_admin {
+                if data.phone.len()!=10 {
+                    return error_msg("電話號碼應該為十碼").await;
+                }
+                if data.address.len() == 0 {
+                    return error_msg("地址不能為空").await;
+                }
+                if data.address.len() > 30 {
+                    return error_msg("地址不能超過30字").await;
+                }
                 let mut conn = match db.get_conn() {
                     Ok(conn) => conn,
                     Err(_) => return error_handler().await,

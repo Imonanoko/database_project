@@ -78,12 +78,12 @@
                 <span id="unitPriceError" class="error-message">!!數量不能超過8碼</span><br>
                 進貨單價：<input type="number" id="unitPriceInput" name="unitPrice" step="0.01" required maxlength="8"><br>
                 <span id="unitPriceError" class="error-message">!!單價不能超過8碼</span><br>
-                小計:<input type="number" id="totalmoney" name="total" required><br>
+                <!-- 小計:<input type="number" id="totalmoney" name="total" required><br> -->
                 進貨日期:<input type="text" id="purchaseDate" name="purchaseDate" placeholder="yyyy/mm/dd" required><br>
                 <input type="submit" id="submitpurchase" name="submitpurchase" value="確認新增">
             </form>
             <script>
-                function calculateAmount() {
+                /*function calculateAmount() {
                     const quantity = document.getElementById("quantityInput").value;
                     const unitPrice = document.getElementById("unitPriceInput").value;
                     const totalMoney = quantity * unitPrice;
@@ -99,10 +99,13 @@
                 document.getElementById("unitPriceInput").addEventListener("input", function () {
                     calculateAmount();
                     //handleInputLength(this, document.getElementById("unitPriceError"));
-                });
+                });*/
 
                 $(document).ready(function () {
                     $("#submitpurchase").click(function () {
+                        const quantity = document.getElementById("quantityInput").value;
+                        const unitPrice = document.getElementById("unitPriceInput").value;
+                        const totalMoney = quantity * unitPrice;
                         $.ajax({
                             type: "POST",
                             url: '/purchase_interface/add_purchase_data',
@@ -117,7 +120,7 @@
                                 unit: $("#unit").val(),
                                 quantity: parseInt($("#quantityInput").val(), 10),
                                 unit_price: parseFloat($("#unitPriceInput").val()),
-                                sub_total: parseFloat($("#totalmoney").val()),
+                                sub_total: parseFloat(totalMoney.toFixed(2)),
                                 purchase_date: $("#purchaseDate").val(),
                             }),
                             contentType: "application/json; charset=utf-8",
