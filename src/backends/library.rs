@@ -22,7 +22,7 @@ pub fn date_check(date: &str) -> bool {
     let year = parts[0].parse::<i32>();
     let month = parts[1].parse::<u32>();
     let day = parts[2].parse::<u32>();
-
+    
     // 檢查年、月、日是否有效
     match (year, month, day) {
         (Ok(y), Ok(m), Ok(d)) => {

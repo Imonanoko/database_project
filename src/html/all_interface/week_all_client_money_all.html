@@ -62,10 +62,7 @@
             <h3>排序某一星期全體客戶每一人之訂貨總金額</h3> <!--客戶以身分證字號顯示-->
             <form id="searchpersonalorderForm" onsubmit="submitForm(event)">
                 <label for="startdate">選擇日期範圍：</label>
-                <input type="date" id="startdate" name="date1" required>
-                到
-                <label for="enddate"></label>
-                <input type="date" id="enddate" name="date2" required>
+                <input type="date" id="startdate" name="date1" required><br>
                 <button id="sortsmallbtn">從小到大排序訂貨金額</button>
                 <button id="sortbigbtn">從大到小排序訂貨金額</button><br>
                 <button id="searchallclientmoneyallbtn">查詢訂貨金額</button>
@@ -75,12 +72,15 @@
         <script>
             $(document).ready(function () {
                 $("#searchallclientmoneyallbtn").click(function () {
+                    var startdate = new Date($("#startdate").val());
+                    var enddate = new Date(startdate);
+                    enddate.setDate(startdate.getDate() + 6);
                     $.ajax({
                         type: "POST",
                         url: '/all_interface/week_all_client_money_all_data',
                         data: JSON.stringify({
-                            start_date: $("#startdate").val(),    // 修正这一行
-                            end_date: $("#enddate").val(),
+                            start_date: startdate,
+                            end_date: enddate,
 
                         }),
                         contentType: "application/json; charset=utf-8",

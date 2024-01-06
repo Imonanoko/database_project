@@ -333,7 +333,7 @@ async fn main() -> std::io::Result<()> {
             )
             .default_service(web::route().to(http_status::error_404)) //其他跳轉到404
     })
-    .bind(("140.128.101.24", 8080))?
+    .bind(("140.128.101.24", 8888))?
     .run()
     .await
 }

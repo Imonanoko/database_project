@@ -100,7 +100,7 @@ pub async fn add_client_data(
                 if data.occupation.len() > 12 {
                     return error_msg("職業最多12個字").await;
                 }
-                if !date_check(&data.address) {
+                if !date_check(&data.add_date) {
                     return error_msg("日期格式錯誤").await;
                 } 
 

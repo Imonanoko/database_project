@@ -113,7 +113,10 @@
             function displayResultsTable(results) {
                 // Clear previous results
                 $("#searchResults").empty();
-
+                var choosedate = document.getElementById("choosedate").value; // Assuming 'year' is the ID of the year input
+                
+                var resultText = choosedate  + "之進貨物品與進貨數量與該貨品之總金額";
+                $("<p>").text(resultText).appendTo("#searchResults");
                 // Create a table and headers
                 var table = $("<table>").appendTo("#searchResults");
                 var thead = $("<thead>").appendTo(table);

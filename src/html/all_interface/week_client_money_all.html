@@ -62,10 +62,7 @@
             <h3>某一星期某一位客戶訂貨總金額</h3>
             <form id="searchpersonalorderForm" onsubmit="submitForm(event)">
                 <label for="startdate">選擇日期範圍：</label>
-                <input type="date" id="startdate" name="date1" required>
-                到
-                <label for="enddate"></label>
-                <input type="date" id="enddate" name="date2" required><br>
+                <input type="date" id="startdate" name="date1" required><br>
                 <button id="searchclientmoneyallbtn">查詢訂貨金額</button>
             
             <div id="searchResults" ></div> <!-- Hide initially -->
@@ -73,12 +70,15 @@
         <script>
             $(document).ready(function () {
                 $("#searchclientmoneyallbtn").click(function () {
+                    var startdate = new Date($("#startdate").val());
+                    var enddate = new Date(startdate);
+                    enddate.setDate(startdate.getDate() + 6);
                     $.ajax({
                         type: "POST",
                         url: '/all_interface/week_client_money_all_data',
                         data: JSON.stringify({
-                            start_date: $("#startdate").val(),
-                            end_date: $("#enddate").val(),
+                            start_date: startdate,
+                            end_date: enddate,
                         }),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
@@ -103,7 +103,12 @@
             function displayResultsTable(results) {
                 // Clear previous results
                 $("#searchResults").empty();
-
+                var startdate = $("#startdate").val();
+                var endDate = new Date(startdate);
+                endDate.setDate(new Date(startdate).getDate() + 6);
+                var enddate = endDate.toISOString().split('T')[0];
+                var resultText = startdate + "~" + enddate + "之訂貨總金額";
+                $("<p>").text(resultText).appendTo("#searchResults");
                 // Create a table and headers
                 var table = $("<table>").appendTo("#searchResults");
                 var thead = $("<thead>").appendTo(table);

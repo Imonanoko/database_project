@@ -127,7 +127,15 @@
             function displayResultsTable(results) {
                 // Clear previous results
                 $("#searchResults").empty();
-                
+
+                // Get year and month values
+                var year = document.getElementById("year").value; // Assuming 'year' is the ID of the year input
+                var month = document.getElementById("month").value; // Assuming 'month' is the ID of the month input
+                var resultText = year + "年" + month + "月之訂貨總金額";
+
+                // Display the result text
+                $("<p>").text(resultText).appendTo("#searchResults");
+
                 // Create a table and headers
                 var table = $("<table>").appendTo("#searchResults");
                 var thead = $("<thead>").appendTo(table);
@@ -146,9 +154,9 @@
                 });
             }
         </script>
-        
+
     </div>
-    
+
     <footer>
         <p>&copy; 2023 Order System</p>
     </footer>

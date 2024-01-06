@@ -73,7 +73,7 @@
                 <label for="product">進貨物品:</label>
                 <input type="text" id="product" name="product" required><br>
                 <label for="startdate">選擇日期: </label>
-                <input type="date" id="startdate" name="date1" required>
+                <input type="date" id="startdate" name="date1" required><br>
         
                 <button id="searchweekproductdatapurchasebtn">查詢訂單</button>
             </form>
@@ -120,7 +120,14 @@
             function displayResultsTable(results) {
                 // Clear previous results
                 $("#searchResults").empty();
+                var startdate = $("#startdate").val();
+                var endDate = new Date(startdate);
+                endDate.setDate(new Date(startdate).getDate() + 6);
+                var enddate = endDate.toISOString().split('T')[0];
+                var resultText = startdate + "~" + enddate + "之進貨物品、進貨數量與該貨品之總金額";
 
+                // Display the result text
+                $("<p>").text(resultText).appendTo("#searchResults");
                 // Create a table and headers
                 var table = $("<table>").appendTo("#searchResults");
                 var thead = $("<thead>").appendTo(table);

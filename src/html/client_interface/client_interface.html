@@ -91,7 +91,7 @@
                     dataType: "json",
                     success: function (data) {
                         $("#customerCount").text("客戶人數: " + data.customer_count+"人");
-                        $("#averageAge").text("客戶平均年齡: " + data.average_age+"歲");
+                        $("#averageAge").text("客戶平均年齡: " + data.average_age.toFixed(2)+"歲");
                         $("#disabledCustomers").text("停用客戶: " + data.disabled_customers+"人");
                         $("#activeCustomers").text("正常用戶: " + data.active_customers+"人");
                     },
