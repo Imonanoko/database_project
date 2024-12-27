@@ -63,12 +63,15 @@ use backends::{
 async fn main() -> std::io::Result<()> {
     let static_files_css = PathBuf::from("./src/css");
     let static_files_images = PathBuf::from("./src/images");
-    let database_url = "mysql://root:Imonanoko@localhost:3306/company_data";
+    let config_path = std::path::Path::new("database.conf");
+    let database_url = std::fs::read_to_string(config_path)?;
+    let database_url = database_url.trim();
+    // let database_url = "mysql://root:Imonanoko@localhost:3306/company_data";
     let pool = Pool::new(database_url).unwrap();
     //生成隨機的key加密session
     let mut key = [0u8; 32];
     rand::thread_rng().fill_bytes(&mut key);
-
+    println!("http server run on: http://140.128.101.24:8889");
     HttpServer::new(move || {
         App::new()
             .app_data(Data::new(pool.clone()))
@@ -333,7 +336,7 @@ async fn main() -> std::io::Result<()> {
             )
             .default_service(web::route().to(http_status::error_404)) //其他跳轉到404
     })
-    .bind(("140.128.101.24", 8888))?
+    .bind(("140.128.101.24", 8889))?
     .run()
     .await
 }

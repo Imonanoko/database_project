@@ -4,7 +4,6 @@ use mysql::prelude::*;
 use mysql::*;
 use serde::Deserialize;
 
-// 结构体用于反序列化 POST 请求的 JSON 数据
 #[derive(Deserialize, Debug)]
 pub struct LoginData {
     // 改成post要得name

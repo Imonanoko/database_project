@@ -1,0 +1,10 @@
+nohup: ignoring input
+thread 'actix-rt|system:0|arbiter:9' panicked at /home/sixsquare/.cargo/registry/src/index.crates.io-6f17d22bba15001f/mysql_common-0.24.1/src/row/convert.rs:82:39:
+Couldn't convert Row { total_order_amount: Null } to type f32. (see FromRow documentation)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread 'actix-rt|system:0|arbiter:10' panicked at /home/sixsquare/.cargo/registry/src/index.crates.io-6f17d22bba15001f/mysql_common-0.24.1/src/row/convert.rs:82:39:
+Couldn't convert Row { total_order_amount: Null } to type f32. (see FromRow documentation)
+thread 'actix-rt|system:0|arbiter:11' panicked at /home/sixsquare/.cargo/registry/src/index.crates.io-6f17d22bba15001f/mysql_common-0.24.1/src/row/convert.rs:82:39:
+Couldn't convert Row { total_order_amount: Null } to type f32. (see FromRow documentation)
+thread 'actix-rt|system:0|arbiter:0' panicked at /home/sixsquare/.cargo/registry/src/index.crates.io-6f17d22bba15001f/mysql_common-0.24.1/src/row/convert.rs:82:39:
+Couldn't convert Row { total_order_amount: Null } to type f32. (see FromRow documentation)

@@ -1,0 +1,8 @@
+MySqlError { ERROR 1062 (23000): Duplicate entry 'Z123456789' for key 'login_data.PRIMARY' }
+建立客戶資料失敗，MySqlError { ERROR 1406 (22001): Data too long for column 'photo' at row 1 }
+MySqlError { ERROR 1062 (23000): Duplicate entry 'Z123456789' for key 'login_data.PRIMARY' }
+MySqlError { ERROR 1062 (23000): Duplicate entry 'M123456789' for key 'login_data.PRIMARY' }
+建立客戶資料失敗，MySqlError { ERROR 1406 (22001): Data too long for column 'photo' at row 1 }
+建立客戶資料失敗，MySqlError { ERROR 1406 (22001): Data too long for column 'photo' at row 1 }
+MySqlError { ERROR 1062 (23000): Duplicate entry 'L123456789' for key 'login_data.PRIMARY' }
+建立客戶資料失敗，MySqlError { ERROR 1406 (22001): Data too long for column 'photo' at row 1 }
